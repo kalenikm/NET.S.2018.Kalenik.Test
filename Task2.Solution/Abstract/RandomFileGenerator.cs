@@ -9,6 +9,16 @@ namespace Task2.Solution.Abstract
 
         public void GenerateFiles(int filesCount, int contentLength)
         {
+            if (filesCount <= 0)
+            {
+                throw new ArgumentException();
+            }
+
+            if (contentLength <= 0)
+            {
+                throw new ArgumentException();
+            }
+
             for (var i = 0; i < filesCount; ++i)
             {
                 var generatedFileContent = this.GenerateFileContent(contentLength);
