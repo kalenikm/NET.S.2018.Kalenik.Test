@@ -1,8 +1,11 @@
-﻿namespace Task5.Console
+﻿using Task5.Solution.Converters;
+using Task5.Solution.DocumentParts;
+
+namespace Task5.Console
 {
     using System.Collections.Generic;
     using System;
-    using Task5;
+    using Task5.Solution;
 
     class Program
     {
@@ -11,17 +14,17 @@
             List<DocumentPart> parts = new List<DocumentPart>
                 {
                     new PlainText {Text = "Some plain text"},
-                    new Hyperlink {Text = "google.com", Url = "https://www.google.by/"},
+                    new HyperLink {Text = "google.com", Url = "https://www.google.by/"},
                     new BoldText {Text = "Some bold text"}
                 };
 
             Document document = new Document(parts);
 
-            Console.WriteLine(document.ToHtml());
+            Console.WriteLine(document.Print(new HtmlConverter()));
 
-            Console.WriteLine(document.ToPlainText());
+            Console.WriteLine(document.Print(new PlainConverter()));
 
-            Console.WriteLine(document.ToLaTeX());
+            Console.WriteLine(document.Print(new LaTeXConverter()));
         }
     }
 }
