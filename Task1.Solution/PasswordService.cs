@@ -9,7 +9,17 @@ namespace Task1.Solution
         {
             if (ReferenceEquals(null, password))
             {
-                throw new ArgumentException($"{nameof(password)} is null arg");
+                throw new ArgumentNullException($"{nameof(password)} is null.");
+            }
+
+            if (ReferenceEquals(null, validator))
+            {
+                throw new ArgumentNullException($"{nameof(validator)} is null.");
+            }
+
+            if (ReferenceEquals(null, repository))
+            {
+                throw new ArgumentNullException($"{nameof(password)} is null.");
             }
 
             var result = validator.IsValid(password);
