@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Task4.Solution
+namespace Task4.Solution.Method1
 {
     static class CalculatorMethodFactory
     {
