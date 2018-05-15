@@ -1,36 +1,62 @@
 ﻿using System;
+using System.Collections.Generic;
 using Task1.Solution.Interfaces;
 
 namespace Task1.Solution
 {
     public class PasswordService
     {
-        public Tuple<bool, string> AddPassword(string password, IValidator validator, IRepository repository)
+
+        private readonly IRepository _repository;
+
+        public PasswordService(IRepository repository)
+        {
+            if (ReferenceEquals(null, repository))
+            {
+                throw new ArgumentNullException($"{nameof(repository)} is null.");
+            }
+
+            _repository = repository;
+        }
+
+        public Tuple<bool, List<string>> AddPassword(string password, IEnumerable<IValidator> validators)
         {
             if (ReferenceEquals(null, password))
             {
                 throw new ArgumentNullException($"{nameof(password)} is null.");
             }
 
-            if (ReferenceEquals(null, validator))
+            if (ReferenceEquals(null, validators))
             {
-                throw new ArgumentNullException($"{nameof(validator)} is null.");
+                throw new ArgumentNullException($"{nameof(validators)} is null.");
             }
 
-            if (ReferenceEquals(null, repository))
+            var messages = new List<string>();
+            bool result = true;
+
+            foreach (var validator in validators)
             {
-                throw new ArgumentNullException($"{nameof(password)} is null.");
+                if (!ReferenceEquals(null, validator))
+                {
+                    var res = validator.IsValid(password);
+                    if (!res.Item1)
+                    {
+                        result = false;
+                        messages.Add(res.Item2);
+                    }
+                }
             }
 
-            var result = validator.IsValid(password);
-
-            if (result.Item1)
+            if (result)
             {
-                repository.Save(password);
-                return Tuple.Create(true, "Password is Ok. User was created");
+                _repository.Save(password);
+                return Tuple.Create(true, new List<string>() {"Password is Ok. User was created"});
+            }
+            else
+            {
+                return Tuple.Create(false, messages);
             }
 
-            return result;
         }
     }
 }
